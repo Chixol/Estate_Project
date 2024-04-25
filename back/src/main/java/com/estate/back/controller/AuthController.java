@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.estate.back.dto.request.auth.EmailAuthRequestDto;
 import com.estate.back.dto.request.auth.IdCheckRequestDto;
 import com.estate.back.dto.response.ResponseDto;
 import com.estate.back.service.AuthService;
@@ -30,4 +31,11 @@ public class AuthController {
         return response;
     }
     
+    @PostMapping("/email-auth")
+    public ResponseEntity<ResponseDto> emailAuth (
+        @RequestBody @Valid EmailAuthRequestDto requestBody
+    ) {
+        ResponseEntity<ResponseDto> response = authService.emailAuth(requestBody);
+        return response;
+    }
 }
