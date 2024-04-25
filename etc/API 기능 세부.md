@@ -90,9 +90,17 @@ P!ssw0rd
 
 (userId, userPassword)
 
-// 아래 내용은 password가 암호화 되었기 때문에 쿼리문이 작동하지 않음
-<!-- 2. 데이터베이스의 user 테이블에서 userId에 해당하는 유저 레코드 조회
-select * from user where userId = :userId and userPassword = :userPassword -->
+2. 데이터베이스의 user 테이블에서 해당하는 userId를 가지고 있는 유저가 있는지 확인 (T/F 결과)
+2.1 만약 유저 레코드가 존재하지 않으면 'SF' 응답 처리 
+2.2 만약 데이터베이스 작업 중 에러가 발생하면 'DBE' 응답 처리
+
+3. 조회한 레코드의 암호화 비밀번호와 사용자가 입력한 평문의 비밀번호가 일치하는지 비교
+3.1 만약 비밀번호가 서로 일치하지 않으면 'SF' 응답 처리
+
+4. JWT로된 accessToken 생성
+4.1 만약 accessToken 생성 중 에러가 발생하면 'TF' 응답 처리
+
+5. 'SU' 응답 처리 (accessToken, expires 데이터가 포함되어있음)
 
 --------------------------------------------------------------------------
 

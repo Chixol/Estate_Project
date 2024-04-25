@@ -19,7 +19,7 @@ public class SignUpRequestDto {
     @Pattern(regexp="^[a-zA-Z0-9]*@([-.]?[a-zA-Z0-9])*\\.[a-zA-Z]{2,4}$")
     private String  userEmail;
     @NotNull
-    @Pattern(regexp = "^?=.[a-zA-Z](?=.[0-9]).{8,13}&")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,13}$")
     private String userPassword;
     @NotBlank
     private String authNumber;
