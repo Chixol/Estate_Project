@@ -21,7 +21,7 @@ export interface EmailAuthCheckRequestDto {
 }
 
 //description : 회원가입 Request Body DTO
-export interface SignInRequestDto {
+export interface SignUpRequestDto {
     userId: string;
     userPassword: string;
     userEmail: string;
