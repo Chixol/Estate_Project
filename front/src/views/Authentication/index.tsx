@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import './style.css';
 import SignInBackground from 'src/assets/image/sign-in-background.png'
 import SignUpBackground from 'src/assets/image/sign-up-background.png'
@@ -8,22 +8,49 @@ import { EmailAuthCheckRequest, EmailAuthRequest, IdCheckRequest, SignInRequest,
 import ResponseDto from 'src/apis/response.dto';
 import { SignInResponseDto } from 'src/apis/auth/dto/response';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { LOCAL_ABSOLUTE_PATH } from 'src/constant';
 
+//                    component                    //
+export function Sns() {
 
+      //                    state                    //
+  const { accessToken, expires } = useParams();
+  const [cookies, setCookie] = useCookies();
+
+    //                    function                    //
+  const navigator = useNavigate();
+
+    //                    effect                    //
+  useEffect(() => {
+    if (!accessToken || !expires) return; 
+    const expiration = new Date(Date.now() + (Number(expires) * 1000));
+    setCookie('accessToken', accessToken, { path:'/', expires: expiration });
+
+    navigator(LOCAL_ABSOLUTE_PATH);
+  }, []);
+
+    //                    render                    //
+  return <></>
+}
+
+//                    type                    //
 type AuthPage = 'sign-in' | 'sign-up';
 
+//                    interface                    //
 interface SnSContainerProps{
   title: string
 }
 
+//                    component                    //
 function SnSContainer({title}: SnSContainerProps) {
 
+    //                    event handler                    //
   const onSnsButtonClickHandler = (type: 'kakao' | 'naver') => {
-    alert(type)
+    window.location.href = "http://localhost:4000/api/v1/auth/oauth2/" + type;
   };
 
+    //                    render                    //
   return(
     <div className='authentication-container'> 
       <div className='sns-container-title label'>{title}</div>
@@ -35,12 +62,15 @@ function SnSContainer({title}: SnSContainerProps) {
   )
 } ;
 
+//                    interface                    //
 interface Props {
   onLinkClickHandler: () => void
 };
 
+//                    component                    //
 function SignIn ({ onLinkClickHandler }: Props) {
   
+    //                    state                    //
   const [cookies, setCookie] = useCookies();
 
   const [id, setId] = useState<string>('');
@@ -100,8 +130,7 @@ function SignIn ({ onLinkClickHandler }: Props) {
 
     };
 
-
-
+    //                    render                    //
   return (
     <div className='authentication-contents'>
       <div className='authentication-input-container'>
@@ -119,8 +148,10 @@ function SignIn ({ onLinkClickHandler }: Props) {
   );
 };
 
+//                    component                    //
 function SignUp ({onLinkClickHandler}: Props) {
 
+    //                    state                    //
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<string>('');
@@ -330,7 +361,7 @@ const onSignUpButtonClickHandler = () => {
   SignUpRequest(requestBody).then(signUpResponse);
 };
 
-
+    //                    render                    //
   return (
     <div className='authentication-contents'>
       <SnSContainer title='SNS 회원가입' />
@@ -359,17 +390,20 @@ const onSignUpButtonClickHandler = () => {
   );
 };
 
-//                    constant                    //
+//                    component                    //
 
 export default function Authentication() {
 
+    //                    state                    //
   const [page, setPage] = useState<AuthPage>('sign-in');
 
+    //                    event handler                    //
   const onLinkClickHandler = () => {
     if (page === 'sign-in') setPage('sign-up');
     else setPage('sign-in');
   };
 
+    //                    constant                    //
   const AuthenticationContents = [page === 'sign-in' ? <SignIn onLinkClickHandler={onLinkClickHandler} /> : <SignUp onLinkClickHandler={onLinkClickHandler}/>]
 
   const imageBoxStyle = { backgroundImage: `url(${page === 'sign-in' ? SignInBackground : SignUpBackground}` }
