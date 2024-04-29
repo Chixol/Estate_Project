@@ -3,7 +3,7 @@ import './style.css';
 import SignInBackground from 'src/assets/image/sign-in-background.png'
 import SignUpBackground from 'src/assets/image/sign-up-background.png'
 import InputBox from 'src/components/Inputbox';
-import { EmailAuthCheckRequestDto, EmailAuthRequestDto, IdCheckRequestDto, SignINRequestDto, SignUpRequestDto } from 'src/apis/auth/dto/request';
+import { EmailAuthCheckRequestDto, EmailAuthRequestDto, IdCheckRequestDto, SignInRequestDto, SignUpRequestDto } from 'src/apis/auth/dto/request';
 import { EmailAuthCheckRequest, EmailAuthRequest, IdCheckRequest, SignInRequest, SignUpRequest } from 'src/apis/auth';
 import ResponseDto from 'src/apis/response.dto';
 import { SignInResponseDto } from 'src/apis/auth/dto/response';
@@ -92,7 +92,7 @@ function SignIn ({ onLinkClickHandler }: Props) {
         return;
       };
 
-      const requestBody: SignINRequestDto = {
+      const requestBody: SignInRequestDto = {
         userId: id,
         userPassword: password
       };

@@ -42,6 +42,10 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())
             )
+            .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
+                .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+            )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return httpSecurity.build();
