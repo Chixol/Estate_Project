@@ -3,8 +3,8 @@ import './style.css';
 import SignInBackground from 'src/assets/image/sign-in-background.png'
 import SignUpBackground from 'src/assets/image/sign-up-background.png'
 import InputBox from 'src/components/Inputbox';
-import { EmailAuthRequestDto, IdCheckRequestDto } from 'src/apis/auth/dto/request';
-import { EmailAuthRequest, IdCheckRequest } from 'src/apis/auth';
+import { EmailAuthCheckRequestDto, EmailAuthRequestDto, IdCheckRequestDto, SignUpRequestDto } from 'src/apis/auth/dto/request';
+import { EmailAuthCheckRequest, EmailAuthRequest, IdCheckRequest, SignUpRequest } from 'src/apis/auth';
 import ResponseDto from 'src/apis/response.dto';
 
 
@@ -158,7 +158,42 @@ const emailAuthResponse = (result: ResponseDto | null) => {
   setEmailCheck(emailCheck);
   setEmailError(emailError);
 
-}
+};
+
+const emailAuthCheckResponse = (result: ResponseDto | null) => {
+
+  const authNumberMessage = 
+    !result ? '서버에 문제가 있습니다.' :
+    result.code === 'VF' ? '인증번호를 입력해 주세요.' :
+    result.code === 'AF' ? '인증번호가 일치하지 않습니다.' :
+    result.code === 'DBE' ? '서버에 문제가 있습니다.' :
+    result.code === 'SU' ? '인증번호가 확인되었습니다.' : '';
+  const authNumberCheck = result !== null && result.code === 'SU';
+  const authNumberError = !authNumberCheck;
+
+  setAuthNumberMessage(authNumberMessage);
+  setAuthNumberCheck(authNumberCheck);
+  setAuthNumberError(authNumberError);
+
+};
+
+const signUpResponse = (result: ResponseDto | null) => {
+  const message = 
+    !result ? '서버에 문제가 있습니다.' :
+    result.code === 'VF' ? '입력 형식이 맞지 않습니다.' : 
+    result.code === 'DI' ? '이미 사용중인 아이디 입니다.' :
+    result.code === 'DE' ? '중복된 이메일 입니다.' :
+    result.code === 'AF' ? '인증번호가 일치하지 않습니다.' :
+    result.code === 'DBE' ? '서버에 문제가 있습니다.' : ''
+
+  const isSuccess = result && result.code === 'SU';
+  if (!isSuccess) {
+    alert(message);
+    return;
+  }
+  onLinkClickHandler();
+
+};
 
 //                                    event handler                                    //
   const onIdChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -236,16 +271,29 @@ const onEmailButtonClickHandler = () => {
 
 const onAuthNumberButtonClickHandler = () => {
   if(!authNumberButtonStatus) return;
-  const authNumberCheck = authNumber === "1234";
-  setAuthNumberCheck(authNumberCheck);
-  setAuthNumberError(!authNumberCheck);
-  const authNumberMessage = authNumberCheck ? '인증번호가 확인되었습니다.' : '인증번호가 일치하지 않습니다.'
-  setAuthNumberMessage(authNumberMessage);
+  if(!authNumber) return;
+
+  const requestBody: EmailAuthCheckRequestDto = {
+    userEmail: email,
+    authNumber //변수명과 같으면 생략가능 (authNumber{:authNumber})
+  };
+  EmailAuthCheckRequest(requestBody).then(emailAuthCheckResponse);
 };
 
 const onSignUpButtonClickHandler = () => {
   if(!isSignUpActive) return;
-  alert('회원가입');
+  if(!id || !password || !passwordCheck || !email || !authNumber) {
+    alert('모든 내용을 입력해주세요.');
+    return;
+  }
+
+  const requestBody: SignUpRequestDto = {
+    userId: id,
+    userPassword: password,
+    userEmail: email,
+    authNumber
+  }
+  SignUpRequest(requestBody).then(signUpResponse);
 };
 
 
@@ -277,6 +325,8 @@ const onSignUpButtonClickHandler = () => {
   );
 };
 
+//                    constant                    //
+
 export default function Authentication() {
 
   const [page, setPage] = useState<AuthPage>('sign-in');
@@ -289,6 +339,8 @@ export default function Authentication() {
   const AuthenticationContents = [page === 'sign-in' ? <SignIn onLinkClickHandler={onLinkClickHandler} /> : <SignUp onLinkClickHandler={onLinkClickHandler}/>]
 
   const imageBoxStyle = { backgroundImage: `url(${page === 'sign-in' ? SignInBackground : SignUpBackground}` }
+
+//                    render                    //
 
   return (
     <div id='authentication-wrapper'>
