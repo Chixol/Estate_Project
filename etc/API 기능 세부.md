@@ -122,6 +122,8 @@ client가 header에 bearer 토큰을 포함하여 요청
 8. context에 request의 정보와 접근주체의 정보를 추가
 9. 접근주체가 해당 요청을 사용할 권한이 있는지 확인
 
+0.1 만약 인증 및 인가 작업에 실패하면 'AF' 응답 처리
+
 10. 컨트롤러의 메서드에서 인증 접근 주체의 정보를 가져옴
 
 (userId) {dto에 안담겨있음}
@@ -129,7 +131,7 @@ client가 header에 bearer 토큰을 포함하여 요청
 11. 데이터베이스의 user테이블에서 userId에 해당하는 레코드를 조회
 11-1. 데이터베이스 오류 발생시 'DBE' 응답 처리
 
-userEntity = userRespository.findByUserId(userId);
 12. 존재하는 user인지 확인
 12-1. 존재하지 않으면 'NU' 응답 처리 
-String userRole = userEntity.getUserRole();
+
+13. 'SU' 응답 처리 (userId, userRole 포함)
