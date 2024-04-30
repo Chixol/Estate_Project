@@ -108,3 +108,28 @@
   
 7. 'SU' 응답 처리  
   
+
+client가 header에 bearer 토큰을 포함하여 요청
+
+0. 해당 요청의 메서드와 URL을 보고 인증 인가가 필요한 요청인지 확인
+1. header의 Authorization 필드에 값이 있는지 확인
+2. 해당 요청의 인증 방식이 Brarer 인증 방식인지 확인
+3. Authorization 필드에 값에서 토큰 추출
+4. 토큰의 유효성 판단
+5. 토큰에서 userId 추출
+6. userId로 데이터베이스에서 조회
+7. 조회 결과로부터 사용자의 권한을 추출
+8. context에 request의 정보와 접근주체의 정보를 추가
+9. 접근주체가 해당 요청을 사용할 권한이 있는지 확인
+
+10. 컨트롤러의 메서드에서 인증 접근 주체의 정보를 가져옴
+
+(userId) {dto에 안담겨있음}
+
+11. 데이터베이스의 user테이블에서 userId에 해당하는 레코드를 조회
+11-1. 데이터베이스 오류 발생시 'DBE' 응답 처리
+
+userEntity = userRespository.findByUserId(userId);
+12. 존재하는 user인지 확인
+12-1. 존재하지 않으면 'NU' 응답 처리 
+String userRole = userEntity.getUserRole();
