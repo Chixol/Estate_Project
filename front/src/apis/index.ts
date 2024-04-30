@@ -13,3 +13,6 @@ export const requestErrorHandler = (error: any) => {
     if (!responseBody) return null; // undefined로 확인되지만 null로 바꾼것
     return responseBody as ResponseDto;
 };
+
+// function: Authorization Bearer 헤더
+export const bearerAuthorization = (accessToken: string) => ({ headers: { 'Authorization': `Bearer ${accessToken}` } });
