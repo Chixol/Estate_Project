@@ -34,7 +34,7 @@ function Index() {
     return<></>
 }
 
-// component : Application  컴포넌트
+// component : Application  컴포넌트  //
 function App() {
 
     //                                           render                                           //

@@ -1,7 +1,5 @@
 package com.estate.back.entity;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-
 import com.estate.back.dto.request.auth.SignUpRequestDto;
 
 import jakarta.persistence.Entity;
