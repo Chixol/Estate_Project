@@ -545,7 +545,7 @@ Content-Type: application/json;charset=UTF-8
 ###### Example
 
 ```bash
-curl -v -X POST "http://localhost:4000/api/v1/user/" \
+curl -v -X GET "http://localhost:4000/api/v1/user/" \
  -H "Authorization: Bearer {JWT}" 
 ```
 
@@ -627,7 +627,7 @@ Q&A 게시물과  관련된 REST API 모듈
 
 클라이언트로부터 Request Header의 Authorization 필드로 Bearer 토큰을 포함하여 제목, 내용을 입력받고 작성에 성공하면 성공처리를 합니다. 만약 작성에 실패하면 실패처리 됩니다. 인가 실패, 데이터베이스 에러, 데이터 유효성 검사 실패가 발생할 수 있습니다.
 
-- method : **GET**  
+- method : **POST**  
 - URL : **/**  
 
 ##### Request
@@ -642,14 +642,16 @@ Q&A 게시물과  관련된 REST API 모듈
 
 | name | type | description | required |
 |---|:---:|:---:|:---:|
-| userId | String | 사용자의 아이디 | O |
-| userPassword | String | 사용자의 비밀번호 | O |
+| title | String | Q&A 제목 | O |
+| contents | String | Q&A 내용 | O |
 
 ###### Example
 
 ```bash
-curl -v -X POST "http://localhost:4000/api/v1/user/" \
- -H "Authorization: Bearer {JWT}" 
+curl -v -X POST "http://localhost:4000/api/v1/board/" \
+ -H "Authorization: Bearer {JWT}" \
+ -d "title={title}" \
+ -d "contents={contents}"
 ```
 
 ##### Response
@@ -666,8 +668,8 @@ curl -v -X POST "http://localhost:4000/api/v1/user/" \
 |---|:---:|:---:|:---:|
 | code | String | 사용자의 아이디 | O |
 | message | String | 사용자의 비밀번호 | O |
-| userId | String | 사용자의 아이디 | O |
-| expires | String | 사용자의 권한 | O |
+| code | String | 결과 코드 | O |
+| message | String | 결과 메시지 | O |
 
 ###### Example
 
@@ -680,6 +682,16 @@ Content-Type: application/json;charset=UTF-8
   "message": "Success.",
   "userId": "${userId}",
   "userRole": "${userRole}"
+}
+```
+
+**응답 : 실패 (데이터 유효성 검사 실패)**
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+{
+  "code": "VF",
+  "message": "Validation Failed."
 }
 ```
 
