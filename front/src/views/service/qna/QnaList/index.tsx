@@ -67,7 +67,7 @@ export default function QnaList() {
             </div>
 
             <div className='qna-list-bottom'>
-                <div></div>
+                <div style={{ width: '299px' }}></div>
                 <div className='qna-list-pagination'>
                     <div className='qna-list-page-left'></div>
                     <div className='qna-list-page-box'>
