@@ -91,6 +91,7 @@ export default function QnaList() {
 
         const totalPage = Math.floor((totalLength - 1) / COUNT_PER_PAGE) + 1;
         setTotalPage(totalPage);
+        if (!totalPage) setCurrentPage(0);
 
         const totalSection = Math.floor((totalPage - 1) / COUNT_PER_SECTION) + 1;
         setTotalSection(totalSection);
@@ -139,8 +140,8 @@ export default function QnaList() {
 
         const { boardList } = result as GetSearchBoardListResponseDto;
         changeBoardList(boardList);
-        setCurrentPage(1);
-        setCurrentSection(1);
+        setCurrentPage(!boardList.length ? 0 : 1);
+        setCurrentSection(!boardList.length ? 0 : 1);
     };
 
     //                    event handler                    //
@@ -159,7 +160,7 @@ export default function QnaList() {
     };
 
     const onPreSectionClickHandler = () => {
-        if (currentSection === 1) return;
+        if (currentSection <= 1) return;
         setCurrentSection(currentSection - 1);
         setCurrentPage((currentSection - 1) * COUNT_PER_SECTION);
     };
