@@ -1,6 +1,7 @@
 package com.estate.back.entity;
 
 import com.estate.back.dto.request.board.PostBoardRequestDto;
+import com.estate.back.dto.request.board.PutBoardRequestDto;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -50,5 +51,10 @@ public class BoardEntity {
 
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    public void update(PutBoardRequestDto dto) {
+        this.title = dto.getTitle();
+        this.contents = dto.getContents();
     }
 }
