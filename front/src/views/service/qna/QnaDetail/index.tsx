@@ -5,15 +5,13 @@ import { getBoardRequest, increaseViewCountRequest, postCommentRequest } from 's
 import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router';
 import ResponseDto from 'src/apis/response.dto';
-import { AUTH_ABSOLUTE_PATH, QNA_LIST_ABSOLUTE_PATH } from 'src/constant';
+import { AUTH_ABSOLUTE_PATH, QNA_LIST_ABSOLUTE_PATH, QNA_UPDATE_ABSOLUTE_PATH } from 'src/constant';
 import { GetBoardResponseDto } from 'src/apis/board/dto/response';
 import { PostCommentRequestDto } from 'src/apis/board/dto/request';
 
 //                    component                    //
 export default function QnaDetail() {
     //                    state                    //
-    const commentRef = useRef<HTMLTextAreaElement | null>(null);
-
     const { loginUserId, loginUserRole } = useUserStore();
     const { receptionNumber } = useParams();
 
@@ -25,6 +23,8 @@ export default function QnaDetail() {
     const [contents, setContents] = useState<string>('');
     const [status, setStatus] = useState<boolean>(false);
     const [comment, setComment] = useState<string | null>(null);
+    const [commentRows, setCommentRows] = useState<number>(1);
+
     //                    function                    //
     const navigator = useNavigate();
 
@@ -103,9 +103,8 @@ export default function QnaDetail() {
         const comment = event.target.value;
         setComment(comment);
 
-        if (!commentRef.current) return;
-        commentRef.current.style.height = 'auto';
-        commentRef.current.style.height = `${commentRef.current.scrollHeight}px`;
+        const commentRows = comment.split('\n').length;
+        setCommentRows(commentRows);
     };
 
     const onCommentSubmitClickHandler = () => {
@@ -115,6 +114,23 @@ export default function QnaDetail() {
         const requestBody: PostCommentRequestDto = {comment};
         postCommentRequest(receptionNumber, requestBody,cookies.accessToken).then(postCommentResponse);
     };
+
+    const onListClickHandler = () => {
+        navigator(QNA_LIST_ABSOLUTE_PATH);
+    };
+
+    const onUpdateClickHandler = () => {
+        if (!receptionNumber || loginUserId !== writerId || status) return;
+        navigator(QNA_UPDATE_ABSOLUTE_PATH(receptionNumber));
+    };
+
+    const onDeleteClickHandler = () => {
+        if (!receptionNumber || loginUserId !== writerId) return;
+        const isConfirm = window.confirm('정말로 삭제하시겠습니까?');
+        if (!isConfirm) return;
+
+        alert('삭제');
+    }
 
     //                    effect                    //
     useEffect(() => {
@@ -142,7 +158,7 @@ export default function QnaDetail() {
             {loginUserRole === 'ROLE_ADMIN' && !status &&
             <div className='qna-detail-comment-write-box'>
                 <div className='qna-detail-comment-textarea-box'>
-                    <textarea className='qna-detail-comment-textarea' placeholder='답글을 작성해주세요.' value={comment == null ? '' : comment} onChange={onCommentChangeHandler}/>
+                    <textarea style={{ height: `${28 * commentRows}px`}} className='qna-detail-comment-textarea' placeholder='답글을 작성해주세요.' value={comment == null ? '' : comment} onChange={onCommentChangeHandler}/>
                 </div>
                 <div className='primary-button' onClick={onCommentSubmitClickHandler}>답글 달기</div>
             </div>
@@ -154,11 +170,11 @@ export default function QnaDetail() {
             </div>
             }
             <div className='qna-detail-button-box'>
-                <div className='primary-button'>목록보기</div>
+                <div className='primary-button' onClick={onListClickHandler}>목록보기</div>
                 {loginUserId === writerId && 
                 <div className='qna-detail-owner-button-box'>
-                    <div className='second-button'>수정</div>
-                    <div className='error-button'>삭제</div>
+                    {!status && <div className='second-button' onClick={onUpdateClickHandler}>수정</div>}
+                    <div className='error-button' onClick={onDeleteClickHandler}>삭제</div>
                 </div>
                 }
             </div>

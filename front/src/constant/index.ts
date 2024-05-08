@@ -45,5 +45,5 @@ export const GET_BOARD_URL = (receptionNumber: number | string) => `${SERVER_BOA
 export const INCREASE_VIEW_COUNT_URL = (receptionNumber: number | string) => `${SERVER_BOARD_MODULE_URL}/${receptionNumber}/increase-view-count`;
 
 // description: 게시물 상수 (n개씩 보기에는 해당 안되는 페이지라서 10개씩 지정)
-export const COUNT_PER_PAGE = 1;
-export const COUNT_PER_SECTION = 2;
+export const COUNT_PER_PAGE = 10;
+export const COUNT_PER_SECTION = 10;

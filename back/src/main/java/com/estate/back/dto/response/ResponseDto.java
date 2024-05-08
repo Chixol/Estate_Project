@@ -53,6 +53,11 @@ public class ResponseDto {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
     
+    public static ResponseEntity<ResponseDto> authorizationFailed() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.AUTHORIZATION_FAIL, ResponseMessage.AUTHORIZATION_FAIL);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+    }
+    
     public static ResponseEntity<ResponseDto> tokenCreationFailed() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.TOKEN_CREATION_FAIL, ResponseMessage.TOKEN_CREATION_FAIL);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
