@@ -1,18 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css';
+import SelectBox from 'src/components/Selectbox';
 
 // component //
 export default function Local() {
-    
+
     // render //
     return  (
         <div id='local-wrapper'>
             <div className='local-top'>
                 <div className='local-search-box'>
-                    <div className='select-box'>
-                        <div className='select-selected'></div>
-                        <div className='select-open-button'></div>
-                    </div>
+                    <SelectBox />
                     <div className='primary-button'>검색</div>
                 </div>
                 <div className='local-origin-text'>데이터 출처: KOSIS</div>
