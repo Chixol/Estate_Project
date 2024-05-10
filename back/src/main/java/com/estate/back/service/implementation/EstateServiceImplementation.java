@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.estate.back.dto.response.ResponseDto;
 import com.estate.back.dto.response.estate.GetLocalDataResponseDto;
-import com.estate.back.entity.BoardEntity;
 import com.estate.back.repository.EstateRepository;
+import com.estate.back.repository.resultSet.GetLocalDataResultSet;
 import com.estate.back.service.EstateService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,16 @@ public class EstateServiceImplementation implements EstateService{
     public ResponseEntity<? super GetLocalDataResponseDto> getLocalData(String local) {
         
         try {
+
+            List<GetLocalDataResultSet> resultSets =estateRepository.getLocalData(local);
+            return GetLocalDataResponseDto.success(resultSets); // throw 발생하려고 try안에 넣음
+
             
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return GetLocalDataResponseDto.success(null);
 
     }
     

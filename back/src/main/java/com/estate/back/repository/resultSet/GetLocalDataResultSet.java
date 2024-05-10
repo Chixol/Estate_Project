@@ -1,8 +1,8 @@
 package com.estate.back.repository.resultSet;
 
 public interface GetLocalDataResultSet {
-    String getTearMonth();
+    String getYearMonth();
     Integer getSale();
     Integer getLease();
-    Integer gerMonthRent();
+    Integer getMonthRent();
 }
