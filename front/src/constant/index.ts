@@ -50,6 +50,8 @@ export const SERVER_ESTATE_MODULE_URL = `${SERVER_API_URL}/estate`;
 
 export const GET_LOCAL_DATA_URL = (local: string) => `${SERVER_ESTATE_MODULE_URL}/local/${local}`;
 
+export const GET_RATIO_DATA_URL = (local: string) => `${SERVER_ESTATE_MODULE_URL}/ratio/${local}`
+
 // description: 게시물 상수 (n개씩 보기에는 해당 안되는 페이지라서 10개씩 지정)
 export const COUNT_PER_PAGE = 10;
 export const COUNT_PER_SECTION = 10;
